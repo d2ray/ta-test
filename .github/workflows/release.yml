@@ -10,8 +10,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [ windows-latest, macos-latest ]
-        architecture: [ x86_64, arm64 ]
+        platform: [windows-latest, macos-latest]
+        architecture: [x86_64, arm64]
 
     steps:
       - name: Checkout repository
@@ -54,6 +54,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          tag_name: ${{ github.ref_name }}  # Use branch name as the tag
           files: |
             src-tauri/target/release/bundle/*
           draft: false
