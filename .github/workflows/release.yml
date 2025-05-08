@@ -58,9 +58,11 @@ jobs:
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          body: "休息休息."
-          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ github.ref_name || 'v0.0.0-dev' }}  # 回退默认值
+          generate_release_notes: true  # 自动生成Release说明
           files: |
             src-tauri/target/release/bundle/**/*.deb
             src-tauri/target/release/bundle/**/*.msi
