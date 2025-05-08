@@ -1,0 +1,37 @@
+name: ta-test Release
+
+on:
+    workflow_dispatch:
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            -   name: Checkout repository
+                uses: actions/checkout@v4
+
+            -   name: Setup Node.js
+                uses: actions/setup-node@v4
+                with:
+                    node-version: "20"
+
+            -   name: Setup Rust
+                uses: dtolnay/rust-toolchain@stable
+
+            -   name: Install pnpm
+                uses: pnpm/action-setup@v4
+                with:
+                    version: "latest"
+                    run_install: true
+
+            -   name: Build Tauri app
+                uses: tauri-apps/tauri-action@v0
+                env:
+                    NODE_OPTIONS: "--max_old_space_size=4096"
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                with:
+                    tagName: v__VERSION__
+                    releaseName: "ta-test v__VERSION__"
+                    releaseBody: "ta-test 1.0.0 发布"
+                    tauriScript: pnpm
