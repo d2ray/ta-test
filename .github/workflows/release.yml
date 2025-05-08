@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [windows-latest, macos-12, macos-13, macos-14, macos-15, macos-latest]
+        platform: [windows-latest, macos-latest]
         architecture: [x86_64, arm64]
 
     steps:
@@ -61,5 +61,6 @@ jobs:
           tag_name: ${{ github.ref_name }}
           files: |
             src-tauri/target/release/bundle/dmg/*.dmg
+            src-tauri/target/release/bundle/windows/*.exe
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
