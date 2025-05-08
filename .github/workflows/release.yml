@@ -55,3 +55,15 @@ jobs:
           name: my-tauri-app-${{ matrix.platform }}
           path: src-tauri/target/release/
           if-no-files-found: error
+
+      - name: Create GitHub Release
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            src-tauri/target/release/bundle/**/*.deb
+            src-tauri/target/release/bundle/**/*.msi
+            src-tauri/target/release/bundle/**/*.dmg
+            src-tauri/target/release/bundle/**/*.app.tar.gz
+          draft: false
+          prerelease: false
