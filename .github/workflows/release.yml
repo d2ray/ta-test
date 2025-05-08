@@ -12,10 +12,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-#        platform: [windows-latest, macos-latest]
-#        architecture: [x86_64, arm64]
-        platform: [macos-latest]
-        architecture: [x86_64]
+        platform: [windows-latest, macos-12, macos-13, macos-14, macos-15, macos-latest]
+        architecture: [x86_64, arm64]
 
     steps:
       - name: Checkout repository
