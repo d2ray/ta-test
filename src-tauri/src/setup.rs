@@ -16,9 +16,6 @@ use tauri::menu::{PredefinedMenuItem, Submenu};
 #[cfg(any(target_os = "macos", target_os = "linux"))]
 use std::os::unix::fs::PermissionsExt;
 
-#[cfg(target_os = "windows")]
-use std::fs::Metadata;
-
 pub fn init(app: &mut App) -> Result<(), Box<dyn std::error::Error>> {
     if let Err(e) = create_main_window(app) {
         error!("Failed to create main window: {}", e);
