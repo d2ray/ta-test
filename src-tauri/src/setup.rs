@@ -13,7 +13,7 @@ use tauri::{App, Manager, Runtime};
 #[cfg(target_os = "macos")]
 use tauri::menu::{PredefinedMenuItem, Submenu};
 
-#[cfg(target_os = "unix")]
+#[cfg(any(target_os = "macos", target_os = "linux"))]
 use std::os::unix::fs::PermissionsExt;
 
 #[cfg(target_os = "windows")]
