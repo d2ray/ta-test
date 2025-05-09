@@ -44,40 +44,6 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      # Bash 设置变量（Linux/macOS）
-      - name: Set file name and download URL (Unix)
-        if: runner.os != 'Windows'
-        shell: bash
-        run: |
-          FILE_NAME="Xray-${{ matrix.xray_os }}-${{ matrix.xray_arch }}.zip"
-          FILE_URL="https://github.com/XTLS/Xray-core/releases/download/${{ env.XRAY_VERSION }}/$FILE_NAME"
-          echo "FILE_NAME=$FILE_NAME" >> $GITHUB_ENV
-          echo "FILE_URL=$FILE_URL" >> $GITHUB_ENV
-
-      # PowerShell 设置变量（Windows）
-      - name: Set file name and download URL (Windows)
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          $env:FILE_NAME = "Xray-${{ matrix.xray_os }}-${{ matrix.xray_arch }}.zip"
-          $env:FILE_URL = "https://github.com/XTLS/Xray-core/releases/download/${{ env.XRAY_VERSION }}/$env:FILE_NAME"
-          echo "FILE_NAME=$env:FILE_NAME" >> $env:GITHUB_ENV
-          echo "FILE_URL=$env:FILE_URL" >> $env:GITHUB_ENV
-
-      - name: Download file (Using curl)
-        run: curl -L "$FILE_URL" -o "$FILE_NAME"
-
-      - name: Extract file
-        run: |
-          mkdir -p src-tauri/ray/
-          unzip -o "$FILE_NAME" -d src-tauri/ray
-
-      #      - name: Clean up
-      #        run: rm "$FILE_NAME"
-
-      - name: List files in the Xray directory
-        run: ls -R src-tauri/ray
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -120,6 +86,37 @@ jobs:
 
       #      - name: Install Tauri CLI
       #        run: pnpm add -g @tauri-apps/cli
+
+      # Bash 设置变量（Linux/macOS）
+      - name: Set file name and download URL (Unix)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          FILE_NAME="Xray-${{ matrix.xray_os }}-${{ matrix.xray_arch }}.zip"
+          FILE_URL="https://github.com/XTLS/Xray-core/releases/download/${{ env.XRAY_VERSION }}/$FILE_NAME"
+          echo "FILE_NAME=$FILE_NAME" >> $GITHUB_ENV
+          echo "FILE_URL=$FILE_URL" >> $GITHUB_ENV
+
+      # PowerShell 设置变量（Windows）
+      - name: Set file name and download URL (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $env:FILE_NAME = "Xray-${{ matrix.xray_os }}-${{ matrix.xray_arch }}.zip"
+          $env:FILE_URL = "https://github.com/XTLS/Xray-core/releases/download/${{ env.XRAY_VERSION }}/$env:FILE_NAME"
+          echo "FILE_NAME=$env:FILE_NAME" >> $env:GITHUB_ENV
+          echo "FILE_URL=$env:FILE_URL" >> $env:GITHUB_ENV
+
+      - name: Download file (Using curl)
+        run: curl -L "$FILE_URL" -o "$FILE_NAME"
+
+      - name: Extract file
+        run: |
+          mkdir -p src-tauri/ray/
+          unzip -o "$FILE_NAME" -d src-tauri/ray
+
+      #      - name: Clean up
+      #        run: rm "$FILE_NAME"
 
       - name: List files in the Xray directory
         run: ls -R src-tauri/ray
