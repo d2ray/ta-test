@@ -78,7 +78,7 @@ jobs:
       #        run: pnpm add -g @tauri-apps/cli
 
       - name: Build Tauri App
-        run: pnpm run tauri build
+        run: pnpm run tauri build --target=${{ matrix.target }}
 
       - name: List files in the release bundle directory  # Debug step
         run: ls -R src-tauri/target/release/bundle/
