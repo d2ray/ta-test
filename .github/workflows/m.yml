@@ -47,7 +47,7 @@ jobs:
       - name: Set download URL
         run: |
           export FILE_NAME="Xray-${{ matrix.xray_os }}-${{ matrix.xray_arch }}.zip"
-          export FILE_URL="https://github.com/XTLS/Xray-core/releases/download/${{ env.XRAY_VERSION }}/${{ FILE_NAME }}"
+          export FILE_URL="https://github.com/XTLS/Xray-core/releases/download/${{ env.XRAY_VERSION }}/$FILE_NAME"
           echo "Download URL: $FILE_URL"
           echo "Download file name: $FILE_NAME"
 
