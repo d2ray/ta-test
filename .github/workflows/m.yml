@@ -121,6 +121,9 @@ jobs:
       #      - name: Install Tauri CLI
       #        run: pnpm add -g @tauri-apps/cli
 
+      - name: List files in the Xray directory
+        run: ls -R src-tauri/ray
+
       - name: Build Tauri App
         run: pnpm run tauri build --target=${{ matrix.target }}
 
