@@ -85,6 +85,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ github.ref_name }}
           files: |
-            src-tauri/target/release/bundle/{dmg,nsis,msi}/*.{dmg,exe,msi}
+            src-tauri/target/release/bundle/dmg/*.dmg
+            src-tauri/target/release/bundle/nsis/*.exe
+            src-tauri/target/release/bundle/msi/*.msi
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
