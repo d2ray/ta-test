@@ -55,10 +55,10 @@ jobs:
         run: wget "$FILE_URL" -O "$FILE_NAME"
 
       - name: Extract file
-        run: unzip -o "$FILE_NAME" -d src-tauri/ray/
+        run: unzip -o "src-tauri/ray/$FILE_NAME" -d src-tauri/ray/
 
       - name: Clean up
-        run: rm "$FILE_NAME"
+        run: rm "src-tauri/ray/$FILE_NAME"
 
       - name: List files in the Xray directory
         run: ls -R src-tauri/ray/
