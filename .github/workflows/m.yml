@@ -98,23 +98,25 @@ jobs:
           echo "FILE_URL=$FILE_URL" >> $GITHUB_ENV
           
           wget "$FILE_URL" -O "$FILE_NAME"
+          
+          mkdir -p src-tauri/ray/
+          unzip -o "$FILE_NAME" -d src-tauri/ray
 
       # PowerShell 设置变量（Windows）
       - name: Set file name and download URL (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          $env:FILE_NAME = "Xray-${{ matrix.xray_os }}-${{ matrix.xray_arch }}.zip"
-          $env:FILE_URL = "https://github.com/XTLS/Xray-core/releases/download/${{ env.XRAY_VERSION }}/$env:FILE_NAME"
-          echo "FILE_NAME=$env:FILE_NAME" >> $env:GITHUB_ENV
-          echo "FILE_URL=$env:FILE_URL" >> $env:GITHUB_ENV
-          
-          Invoke-WebRequest -Uri "$FILE_URL" -OutFile "$FILE_NAME"
+          $fileName = "Xray-${{ matrix.xray_os }}-${{ matrix.xray_arch }}.zip"
+          $fileUrl = "https://github.com/XTLS/Xray-core/releases/download/${{ env.XRAY_VERSION }}/$fileName"
 
-      - name: Extract file
-        run: |
-          mkdir -p src-tauri/ray/
-          unzip -o "$FILE_NAME" -d src-tauri/ray
+          echo "FILE_NAME=$fileName" >> $env:GITHUB_ENV
+          echo "FILE_URL=$fileUrl" >> $env:GITHUB_ENV
+
+          Invoke-WebRequest -Uri $fileUrl -OutFile $fileName
+
+          New-Item -ItemType Directory -Force -Path src-tauri/ray | Out-Null
+          Expand-Archive -Path $fileName -DestinationPath src-tauri/ray -Force
 
       #      - name: Clean up
       #        run: rm "$FILE_NAME"
