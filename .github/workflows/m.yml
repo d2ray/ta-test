@@ -1,0 +1,40 @@
+name: Build Tauri App for macOS x86_64
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-13
+    name: Build macOS (x86_64)
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-apple-darwin
+          override: true
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+
+      - name: Install frontend dependencies
+        run: pnpm install
+
+      - name: Install Rust dependencies
+        run: cargo fetch
+
+      - name: Build Tauri app
+        run: pnpm tauri build
