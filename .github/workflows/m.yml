@@ -25,6 +25,13 @@ jobs:
           target: x86_64-apple-darwin
           override: true
 
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+          cache-all-crates: true
+          cache-on-failure: true
+
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
