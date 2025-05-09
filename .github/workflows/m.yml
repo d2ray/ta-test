@@ -64,8 +64,8 @@ jobs:
           echo "FILE_NAME=$env:FILE_NAME" >> $env:GITHUB_ENV
           echo "FILE_URL=$env:FILE_URL" >> $env:GITHUB_ENV
 
-      - name: Download file
-        run: wget "$FILE_URL" -O "$FILE_NAME"
+      - name: Download file (Using curl)
+        run: curl -L $FILE_URL -o $FILE_NAME
 
       - name: Extract file
         run: |
