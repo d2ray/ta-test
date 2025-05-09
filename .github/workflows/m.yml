@@ -44,24 +44,21 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Set download URL
+      - name: Set environment variables
         run: |
-          export FILE_NAME="Xray-${{ matrix.xray_os }}-${{ matrix.xray_arch }}.zip"
-          export FILE_URL="https://github.com/XTLS/Xray-core/releases/download/${{ env.XRAY_VERSION }}/$FILE_NAME"
-          echo "Download URL: $FILE_URL"
-          echo "Download file name: $FILE_NAME"
+          FILE_NAME="Xray-${{ matrix.xray_os }}-${{ matrix.xray_arch }}.zip"
+          FILE_URL="https://github.com/XTLS/Xray-core/releases/download/${{ env.XRAY_VERSION }}/$FILE_NAME"
+          echo "FILE_NAME=$FILE_NAME" >> $GITHUB_ENV
+          echo "FILE_URL=$FILE_URL" >> $GITHUB_ENV
 
       - name: Download file
-        run: |
-          wget $FILE_URL -O $FILE_NAME
+        run: wget "$FILE_URL" -O "$FILE_NAME"
 
       - name: Extract file
-        run: |
-          unzip -o $FILE_NAME -d src-tauri/ray/
+        run: unzip -o "$FILE_NAME" -d src-tauri/ray/
 
       - name: Clean up
-        run: |
-          rm $FILE_NAME
+        run: rm "$FILE_NAME"
 
       - name: List files in the Xray directory
         run: ls -R src-tauri/ray/
