@@ -8,7 +8,7 @@ on:
 permissions: write-all
 
 env:
-  XRAY_VERSION: 25.4.30
+  XRAY_VERSION: v25.4.30
 
 jobs:
   build:
