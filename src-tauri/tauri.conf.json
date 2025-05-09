@@ -15,9 +15,7 @@
     }
   },
   "bundle": {
-    "resources": [
-      "ray/*"
-    ],
+    "resources": [],
     "active": true,
     "targets": "all",
     "icon": [
