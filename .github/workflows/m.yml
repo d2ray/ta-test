@@ -70,13 +70,13 @@ jobs:
       - name: Extract file
         run: |
           mkdir -p src-tauri/ray/
-          unzip -o "$FILE_NAME" -d src-tauri/ray/
+          unzip -o "$FILE_NAME" -d src-tauri/ray
 
-      - name: Clean up
-        run: rm "$FILE_NAME"
+      #      - name: Clean up
+      #        run: rm "$FILE_NAME"
 
       - name: List files in the Xray directory
-        run: ls -R src-tauri/ray/
+        run: ls -R src-tauri/ray
 
       - name: Checkout repository
         uses: actions/checkout@v4

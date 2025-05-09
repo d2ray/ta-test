@@ -1,6 +1,7 @@
 use super::execute_command;
 use crate::config;
 use once_cell::sync::Lazy;
+use std::process::Command;
 
 // 全局常量，用于存储命令行工具检测结果
 static HAS_GSETTINGS: Lazy<bool> = Lazy::new(|| command_exists("gsettings"));
@@ -17,9 +18,14 @@ fn command_exists(command: &str) -> bool {
 
 // 获取默认网络连接名称
 fn get_nmcli_connection_name() -> Option<String> {
-    let output = execute_command("nmcli -t -f NAME connection show --active");
-    if !output.is_empty() {
-        output.lines().next().map(|line| line.to_string())
+    let output = Command::new("nmcli")
+        .args(&["-t", "-f", "NAME", "connection", "show", "--active"])
+        .output()
+        .ok()?; // 如果执行失败，则返回 None
+
+    if output.status.success() {
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        stdout.lines().next().map(|line| line.to_string())
     } else {
         None
     }
