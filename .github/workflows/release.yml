@@ -73,8 +73,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      #      - name: Install Tauri CLI
-      #        run: pnpm add -g @tauri-apps/cli
+      - name: Install Tauri CLI
+        run: pnpm add -g @tauri-apps/cli
 
       - name: Build Tauri App
         uses: tauri-apps/tauri-action@v0
