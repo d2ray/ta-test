@@ -17,7 +17,7 @@ use tauri::menu::{PredefinedMenuItem, Submenu};
 use std::os::unix::fs::PermissionsExt;
 
 #[cfg(target_os = "windows")]
-use std::os::windows::fs::PermissionsExt;
+use std::fs::Metadata;
 
 pub fn init(app: &mut App) -> Result<(), Box<dyn std::error::Error>> {
     if let Err(e) = create_main_window(app) {
