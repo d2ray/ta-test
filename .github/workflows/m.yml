@@ -93,7 +93,6 @@ jobs:
           tag_name: v${{steps.build.outputs.appVersion}}
           name: "Dray v${{steps.build.outputs.appVersion}}"
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag_name: ${{ github.ref_name }}
           files: |
             src-tauri/target/${{ matrix.target }}/release/bundle/*/ta-test_*
         env:
