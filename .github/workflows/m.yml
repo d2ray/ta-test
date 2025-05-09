@@ -106,9 +106,11 @@ jobs:
           $env:FILE_URL = "https://github.com/XTLS/Xray-core/releases/download/${{ env.XRAY_VERSION }}/$env:FILE_NAME"
           echo "FILE_NAME=$env:FILE_NAME" >> $env:GITHUB_ENV
           echo "FILE_URL=$env:FILE_URL" >> $env:GITHUB_ENV
+          
+          choco install wget -y
 
       - name: Download file (Using curl)
-        run: curl -L "$FILE_URL" -o "$FILE_NAME"
+        run: wget "$FILE_URL" -O "$FILE_NAME"
 
       - name: Extract file
         run: |
