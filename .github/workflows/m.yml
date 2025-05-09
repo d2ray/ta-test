@@ -109,7 +109,7 @@ jobs:
           echo "FILE_NAME=$env:FILE_NAME" >> $env:GITHUB_ENV
           echo "FILE_URL=$env:FILE_URL" >> $env:GITHUB_ENV
           
-          curl.exe -L "$FILE_URL" -o "$FILE_NAME"
+          Invoke-WebRequest -Uri "$FILE_URL" -OutFile "$FILE_NAME"
 
       - name: Extract file
         run: |
