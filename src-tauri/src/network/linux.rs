@@ -1,9 +1,10 @@
 use super::execute_command;
 use crate::config;
+use once_cell::sync::Lazy;
 
 // 全局常量，用于存储命令行工具检测结果
-const HAS_GSETTINGS: bool = command_exists("gsettings");
-const HAS_NMCLI: bool = command_exists("nmcli");
+static HAS_GSETTINGS: Lazy<bool> = Lazy::new(|| command_exists("gsettings"));
+static HAS_NMCLI: Lazy<bool> = Lazy::new(|| command_exists("nmcli"));
 
 // 命令前缀常量
 const GSETTINGS_PROXY: &str = "gsettings set org.gnome.system.proxy";
