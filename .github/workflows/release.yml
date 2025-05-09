@@ -92,8 +92,8 @@ jobs:
           tauriScript: pnpm
           args: --target ${{ matrix.target }}
 
-      - name: List files in the release bundle directory  # Debug step
-        run: ls -R src-tauri/target/${{ matrix.target }}/release/bundle/
+#      - name: List files in the release bundle directory  # Debug step
+#        run: ls -R src-tauri/target/${{ matrix.target }}/release/bundle/
 
       #      - name: Upload build artifacts
       #        uses: actions/upload-artifact@v4
