@@ -48,8 +48,11 @@ jobs:
         with:
           version: 10
 
-      - name: Install Tauri CLI
-        run: pnpm add -g @tauri-apps/cli
+      - name: Install dependencies
+        run: pnpm install
+
+#      - name: Install Tauri CLI
+#        run: pnpm add -g @tauri-apps/cli
 
       - name: Build Tauri App
         run: pnpm run tauri build
