@@ -33,6 +33,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install dependencies on Linux
+          if: runner.os == 'Linux'
+          run: |
+            sudo apt update
+            sudo apt install libwebkit2gtk-4.1-dev \
+            build-essential \
+            curl \
+            wget \
+            file \
+            libxdo-dev \
+            libssl-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev
+
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
