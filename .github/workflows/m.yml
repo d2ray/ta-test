@@ -94,6 +94,6 @@ jobs:
           name: "Dray v${{steps.build.outputs.appVersion}}"
           token: ${{ secrets.GITHUB_TOKEN }}
           files: |
-            src-tauri/target/${{ matrix.target }}/release/bundle/*/ta-test_*
+            src-tauri/target/${{ matrix.target }}/release/bundle/*/dray_*
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
