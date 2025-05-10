@@ -58,9 +58,10 @@ jobs:
 
       - name: Get Dray version from package.json
         id: get_version
+        shell: pwsh
         run: |
-          version=$(jq -r .version package.json)
-          echo "version=$version" >> "$GITHUB_OUTPUT"
+          $version = jq -r .version package.json
+          echo "version=$version" >> $env:GITHUB_OUTPUT
           echo "Dray version is $version"
 
       - name: Build Dray App
