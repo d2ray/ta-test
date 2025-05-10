@@ -148,8 +148,13 @@ jobs:
       - name: Build Dray App
         run: pnpm run tauri build --target=${{ matrix.target }}
 
+      - name: Set bundle output path (cross-platform)
+        shell: bash
+        run: echo "BUNDLE_DIR=src-tauri/target/${{ matrix.target }}/release/bundle" >> "$GITHUB_ENV"
+
       - name: Rename artifact on macOS
         run: |
+          cd "$BUNDLE_DIR"
           FILE=$(ls dray_*)
           mv "$FILE" "${FILE/dray_/dray_macos_}"
 
@@ -227,8 +232,13 @@ jobs:
       - name: Build Dray App
         run: pnpm run tauri build --target=${{ matrix.target }}
 
+      - name: Set bundle output path (cross-platform)
+        shell: bash
+        run: echo "BUNDLE_DIR=src-tauri/target/${{ matrix.target }}/release/bundle" >> "$GITHUB_ENV"
+
       - name: Rename artifact on Linux
         run: |
+          cd "$BUNDLE_DIR"
           FILE=$(ls dray_*)
           mv "$FILE" "${FILE/dray_/dray_linux_}"
 
