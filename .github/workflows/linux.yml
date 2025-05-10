@@ -67,13 +67,18 @@ jobs:
       - name: Build Dray App
         run: pnpm run tauri build --target=${{ matrix.target }}
 
+      - name: Set bundle output path
+        shell: bash
+        run: echo "BUNDLE_DIR=src-tauri/target/${{ matrix.target }}/release/bundle" >> "$GITHUB_ENV"
+
       - name: Rename artifact on Windows
         shell: pwsh
         run: |
-          $file = Get-ChildItem -Filter "dray_*" | Select-Object -First 1
+          $file = Get-ChildItem -Path $env:BUNDLE_DIR\ -Filter "dray_*" | Select-Object -First 1
           if ($file) {
             $newName = $file.Name -replace '^dray_', 'dray_windows_'
-            Rename-Item -Path $file.FullName -NewName $newName
+            $newPath = Join-Path -Path $file.DirectoryName -ChildPath $newName
+            Rename-Item -Path $file.FullName -NewName $newPath
           }
 
       - name: List files in the release bundle directory
@@ -148,8 +153,7 @@ jobs:
       - name: Build Dray App
         run: pnpm run tauri build --target=${{ matrix.target }}
 
-      - name: Set bundle output path (cross-platform)
-        shell: bash
+      - name: Set bundle output path
         run: echo "BUNDLE_DIR=src-tauri/target/${{ matrix.target }}/release/bundle" >> "$GITHUB_ENV"
 
       - name: Rename artifact on macOS
@@ -235,8 +239,7 @@ jobs:
       - name: Build Dray App
         run: pnpm run tauri build --target=${{ matrix.target }}
 
-      - name: Set bundle output path (cross-platform)
-        shell: bash
+      - name: Set bundle output path
         run: echo "BUNDLE_DIR=src-tauri/target/${{ matrix.target }}/release/bundle" >> "$GITHUB_ENV"
 
       - name: Rename artifact on Linux
