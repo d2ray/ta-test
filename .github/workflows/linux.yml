@@ -63,7 +63,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref }}
+          tag_name: ${{ github.ref }}
           files: |
             src-tauri/target/${{ matrix.target }}/release/bundle/dmg/*.dmg
 
@@ -122,7 +122,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref }}
+          tag_name: ${{ github.ref }}
           files: |
             src-tauri/target/${{ matrix.target }}/release/bundle/deb/*.deb
             src-tauri/target/${{ matrix.target }}/release/bundle/rpm/*.rpm
