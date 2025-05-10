@@ -37,17 +37,14 @@
 		"depends": [
 		  "libwebkit2gtk-4.1-dev"
 		]
-	  },
-	  "icon": [
-		"icons/icon.png"
-	  ]
+	  }
 	},
 	"windows": {
 	  "nsis": {
 		"installerIcon": "icons/icon.ico",
 		"uninstallerIcon": "icons/icon.ico",
 		"languages": [
-		  "SimpChinese"
+		  "chinese"
 		]
 	  }
 	}
