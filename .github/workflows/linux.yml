@@ -17,9 +17,11 @@ jobs:
       matrix:
         arch: [ x64, arm64 ]
         include:
-          - target: x86_64-pc-windows-msvc
+          - arch: x64
+            target: x86_64-pc-windows-msvc
             xray_zip: Xray-windows-64.zip
-          - target: aarch64-pc-windows-msvc
+          - arch: arm64
+            target: aarch64-pc-windows-msvc
             xray_zip: Xray-windows-arm64-v8a.zip
 
     runs-on: windows-latest
@@ -47,7 +49,7 @@ jobs:
       - name: List files in the Xray directory
         run: ls -R src-tauri/ray
 
-      - name: Get dray version from package.json
+      - name: Get Dray version from package.json
         id: get_version
         run: ｜
           echo "version=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
@@ -79,9 +81,11 @@ jobs:
       matrix:
         arch: [ x64, arm64 ]
         include:
-          - target: x86_64-apple-darwin
+          - arch: x64
+            target: x86_64-apple-darwin
             xray_zip: Xray-macos-64.zip
-          - target: aarch64-apple-darwin
+          - arch: arm64
+            target: aarch64-apple-darwin
             xray_zip: Xray-macos-arm64-v8a.zip
 
     runs-on: macos-latest
@@ -109,7 +113,7 @@ jobs:
       - name: List files in the Xray directory
         run: ls -R src-tauri/ray
 
-      - name: Get dray version from package.json
+      - name: Get Dray version from package.json
         id: get_version
         run: ｜
           echo "version=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
@@ -141,7 +145,8 @@ jobs:
       matrix:
         arch: [ x64 ]
         include:
-          - target: x86_64-unknown-linux-gnu
+          - arch: x64
+            target: x86_64-unknown-linux-gnu
             xray_zip: Xray-linux-64.zip
 
     runs-on: ubuntu-latest
@@ -169,7 +174,7 @@ jobs:
       - name: List files in the Xray directory
         run: ls -R src-tauri/ray
 
-      - name: Get dray version from package.json
+      - name: Get Dray version from package.json
         id: get_version
         run: ｜
           echo "version=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
