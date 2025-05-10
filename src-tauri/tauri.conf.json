@@ -19,12 +19,24 @@
 	  "ray/*"
 	],
 	"active": true,
-	"targets": "all",
+	"targets": [
+	  "dmg",
+	  "nsis",
+	  "deb",
+	  "rpm"
+	],
 	"icon": [
 	  "icons/64x64.png",
 	  "icons/icon.png",
 	  "icons/icon.icns",
 	  "icons/icon.ico"
-	]
+	],
+	"windows": {
+	  "nsis": {
+		"installerIcon": "icons/icon.ico",
+		"uninstallerIcon": "icons/icon.ico",
+		"language": "chinese"
+	  }
+	}
   }
 }

@@ -15,38 +15,39 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        os: [ macos, windows, linux ]
+        arch: [ 64, arm64 ]
+        exclude:
+          - os: linux
+            arch: arm64
         include:
-          - xray_os: windows
-            xray_arch: 64
-            os: windows-latest
-            target: x86_64-pc-windows-msvc
-
-          - xray_os: windows
-            xray_arch: arm64-v8a
-            os: windows-latest
-            target: aarch64-pc-windows-msvc
-
-          - xray_os: macos
-            xray_arch: 64
-            os: macos-13
+          - os: macos
+            arch: 64
+            run_os: macos-latest
             target: x86_64-apple-darwin
-
-          - xray_os: macos
-            xray_arch: arm64-v8a
-            os: macos-latest
+            xray_zip: Xray-macos-64.zip
+          - os: macos
+            arch: arm64
+            run_os: macos-latest
             target: aarch64-apple-darwin
-
-          - xray_os: linux
-            xray_arch: 64
-            os: ubuntu-latest
+            xray_zip: Xray-macos-arm64-v8a.zip
+          - os: windows
+            arch: 64
+            run_os: windows-latest
+            target: x86_64-pc-windows-msvc
+            xray_zip: Xray-windows-64.zip
+          - os: windows
+            arch: arm64
+            run_os: windows-latest
+            target: aarch64-pc-windows-msvc
+            xray_zip: Xray-windows-arm64-v8a.zip
+          - os: linux
+            arch: 64
+            run_os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
+            xray_zip: Xray-linux-64.zip
 
-    #          - os: ubuntu-latest
-    #            target: aarch64-unknown-linux-gnu
-    #            xray_os: linux
-    #            xray_arch: arm64-v8a
-
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.run_os }}
 
     steps:
       - name: Checkout repository
@@ -58,50 +59,45 @@ jobs:
       - name: Add Rust Target
         run: rustup target add ${{ matrix.target }}
 
-      #      - name: Setup Node.js
-      #        uses: actions/setup-node@v4
-      #        with:
-      #          node-version: 20
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+          cache-all-crates: true
+          cache-on-failure: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
       - name: Setup pnpm
         run: npm install -g pnpm
 
-      - name: Install dependencies
+      - name: Pnpm Install dependencies
         run: pnpm install
-
-      #      - name: Install Tauri CLI
-      #        run: pnpm add -g @tauri-apps/cli
 
       # PowerShell 设置变量（Windows）
       - name: Set file name and download URL (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          $fileName = "Xray-${{ matrix.xray_os }}-${{ matrix.xray_arch }}.zip"
-          $fileUrl = "https://github.com/XTLS/Xray-core/releases/download/${{ env.XRAY_VERSION }}/$fileName"
-
-          echo "FILE_NAME=$fileName" >> $env:GITHUB_ENV
-          echo "FILE_URL=$fileUrl" >> $env:GITHUB_ENV
-
-          Invoke-WebRequest -Uri $fileUrl -OutFile $fileName
+          $url = "https://github.com/XTLS/Xray-core/releases/download/${{ env.XRAY_VERSION }}/${{ matrix.xray_zip }}"
+          Invoke-WebRequest -Uri $url -OutFile ${{ matrix.xray_zip }}
 
           New-Item -ItemType Directory -Force -Path src-tauri/ray | Out-Null
-          Expand-Archive -Path $fileName -DestinationPath src-tauri/ray -Force
+          Expand-Archive -Path ${{ matrix.xray_zip }} -DestinationPath src-tauri/ray -Force
 
       # Bash 设置变量（Linux/macOS）
       - name: Set file name and download URL (Unix)
         if: runner.os != 'Windows'
         shell: bash
         run: |
-          FILE_NAME="Xray-${{ matrix.xray_os }}-${{ matrix.xray_arch }}.zip"
-          FILE_URL="https://github.com/XTLS/Xray-core/releases/download/${{ env.XRAY_VERSION }}/$FILE_NAME"
-          echo "FILE_NAME=$FILE_NAME" >> $GITHUB_ENV
-          echo "FILE_URL=$FILE_URL" >> $GITHUB_ENV
-
-          wget "$FILE_URL" -O "$FILE_NAME"
+          URL="https://github.com/XTLS/Xray-core/releases/download/${{ env.XRAY_VERSION }}/${{ matrix.xray_zip }}"
+          wget "$URL" -O "${{ matrix.xray_zip }}"
 
           mkdir -p src-tauri/ray/
-          unzip -o "$FILE_NAME" -d src-tauri/ray
+          unzip -o "${{ matrix.xray_zip }}" -d src-tauri/ray
 
       - name: Install dependencies on Linux
         if: ${{ matrix.os == 'ubuntu-latest' }}
@@ -116,9 +112,6 @@ jobs:
             librsvg2-dev \
             libwebkit2gtk-4.1-dev \
             libgtk-3-dev
-
-      #      - name: Clean up
-      #        run: rm "$FILE_NAME"
 
       - name: List files in the Xray directory
         run: ls -R src-tauri/ray
