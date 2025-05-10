@@ -8,7 +8,7 @@ on:
 permissions: write-all
 
 env:
-  XRAY_BASE_URL: https://github.com/XTLS/Xray-core/releases/download/v25.4.30/
+  XRAY_VERSION: v25.4.30
 
 jobs:
   linux:
@@ -37,9 +37,9 @@ jobs:
       - name: Set file name and download URL (Unix)
         shell: bash
         run: |
-          ZIP_URL="${{ env.XRAY_BASE_URL }}${{ matrix.xray_zip }}"
-          wget "$ZIP_URL" -O "${{ matrix.xray_zip }}"
-          mkdir -p src-tauri/ray/
+          URL="https://github.com/XTLS/Xray-core/releases/download/${{ env.XRAY_VERSION }}/${{ matrix.xray_zip }}"
+          wget "$URL" -O "${{ matrix.xray_zip }}"
+          mkdir -p src-tauri/ray
           unzip -o "${{ matrix.xray_zip }}" -d src-tauri/ray
 
       - name: List files in the Xray directory
@@ -60,7 +60,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dary-linux-${{ matrix.arch }}
-          path: rc-tauri/target/${{ matrix.target }}/release/bundle/*
+          path: src-tauri/target/${{ matrix.target }}/release/bundle/*
 
       - name: Upload Release
         uses: softprops/action-gh-release@v2
@@ -68,4 +68,5 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref }}
           files: |
-            src-tauri/target/${{ matrix.target }}/release/bundle/*/dray_*
+            src-tauri/target/${{ matrix.target }}/release/bundle/deb/*.deb
+            src-tauri/target/${{ matrix.target }}/release/bundle/rpm/*.rpm
