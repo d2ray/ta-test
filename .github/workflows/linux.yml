@@ -30,6 +30,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Get Dray version from package.json
+        id: get_version
+        shell: pwsh
+        run: |
+          $version = jq -r .version package.json
+          echo "version=$version" >> $env:GITHUB_OUTPUT
+          echo "Dray version is $version"
+
       - name: Setup pnpm and Install dependencies
         run: |
           npm install -g pnpm
@@ -45,14 +53,6 @@ jobs:
 
       - name: List files in the Xray directory
         run: ls -R src-tauri/ray
-
-      - name: Get Dray version from package.json
-        id: get_version
-        shell: pwsh
-        run: |
-          $version = jq -r .version package.json
-          echo "version=$version" >> $env:GITHUB_OUTPUT
-          echo "Dray version is $version"
 
       - name: Add Rust Target
         run: rustup target add ${{ matrix.target }}
@@ -103,6 +103,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Get Dray version from package.json
+        id: get_version
+        run: |
+          version=$(jq -r .version package.json)
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Dray version is $version"
+
       - name: Setup pnpm and Install dependencies
         run: |
           npm install -g pnpm
@@ -118,13 +125,6 @@ jobs:
 
       - name: List files in the Xray directory
         run: ls -R src-tauri/ray
-
-      - name: Get Dray version from package.json
-        id: get_version
-        run: |
-          version=$(jq -r .version package.json)
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-          echo "Dray version is $version"
 
       - name: Add Rust Target
         run: rustup target add ${{ matrix.target }}
@@ -172,6 +172,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Get Dray version from package.json
+        id: get_version
+        run: |
+          version=$(jq -r .version package.json)
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Dray version is $version"
+
       - name: Setup pnpm and Install dependencies
         run: |
           npm install -g pnpm
@@ -187,13 +194,6 @@ jobs:
 
       - name: List files in the Xray directory
         run: ls -R src-tauri/ray
-
-      - name: Get Dray version from package.json
-        id: get_version
-        run: |
-          version=$(jq -r .version package.json)
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-          echo "Dray version is $version"
 
       - name: Install dependencies on Linux
         run: |
