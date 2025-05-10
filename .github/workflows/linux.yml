@@ -163,7 +163,9 @@ jobs:
         run: |
           FILE=$(ls "$BUNDLE_DIR"/dmg/dray_* 2>/dev/null || true)
           if [ -n "$FILE" ] && [ -f "$FILE" ]; then
-            mv "$FILE" "${FILE/dray_/dray_macos_}"
+            NEW_FILE="${FILE/dray_/dray_macos_}"
+            mv "$FILE" "$NEW_FILE"
+            echo "✅ Renamed $(basename "$FILE") to $(basename "$NEW_FILE")"
           else
             echo "❗ No dray_* file found in $BUNDLE_DIR/dmg to rename."
           fi
@@ -249,16 +251,20 @@ jobs:
         run: |
           DEB_FILE=$(find "$BUNDLE_DIR"/deb -maxdepth 1 -type f -name "dray_*" 2>/dev/null || true)
           if [ -n "$DEB_FILE" ] && [ -f "$DEB_FILE" ]; then
-            mv "$DEB_FILE" "${DEB_FILE/dray_/dray_linux_}"
+            NEW_DEB_FILE="${DEB_FILE/dray_/dray_linux_}"
+            mv "$DEB_FILE" "$NEW_DEB_FILE"
+            echo "✅ Renamed $(basename "$DEB_FILE") to $(basename "$NEW_DEB_FILE")"
           else
             echo "❗ No dray_* file found in $BUNDLE_DIR/deb to rename."
           fi
 
           RPM_FILE=$(find "$BUNDLE_DIR"/rpm -maxdepth 1 -type f -name "dray-*" 2>/dev/null || true)
           if [ -n "$RPM_FILE" ] && [ -f "$RPM_FILE" ]; then
-            mv "$RPM_FILE" "${RPM_FILE/dray-/dray-linux-}"
+            NEW_RPM_FILE="${RPM_FILE/dray-/dray-linux-}"
+            mv "$RPM_FILE" "$NEW_RPM_FILE"
+            echo "✅ Renamed $(basename "$RPM_FILE") to $(basename "$NEW_RPM_FILE")"
           else
-            echo "❗ No dray_* file found in $BUNDLE_DIR/rpm to rename."
+            echo "❗ No dray-* file found in $BUNDLE_DIR/rpm to rename."
           fi
 
       - name: List files in the release bundle directory
