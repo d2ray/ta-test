@@ -30,6 +30,15 @@
 	  "icons/icon.png",
 	  "icons/icon.icns",
 	  "icons/icon.ico"
-	]
+	],
+	"macOS": {},
+	"linux": {},
+	"windows": {
+	  "nsis": {
+		"installerIcon": "icons/icon.ico",
+		"uninstallerIcon": "icons/icon.ico",
+		"language": "chinese"
+	  }
+	}
   }
 }
