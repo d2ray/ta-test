@@ -155,7 +155,7 @@ jobs:
       - name: Rename artifact on macOS
         run: |
           FILE=$(ls "$BUNDLE_DIR"/dmg/dray_* 2>/dev/null || true)
-          if [ -n "$FILE" ]; then
+          if [ -n "$FILE" ] && [ -f "$FILE" ]; then
             mv "$FILE" "${FILE/dray_/dray_macos_}"
           else
             echo "❗ No dray_* file found in $BUNDLE_DIR/dmg to rename."
@@ -242,14 +242,14 @@ jobs:
       - name: Rename artifact on Linux
         run: |
           DEB_FILE=$(find "$BUNDLE_DIR"/deb -maxdepth 1 -type f -name "dray_*" 2>/dev/null || true)
-          if [ -n "$DEB_FILE" ]; then
+          if [ -n "$DEB_FILE" ] && [ -f "$DEB_FILE" ]; then
             mv "$DEB_FILE" "${DEB_FILE/dray_/dray_linux_}"
           else
             echo "❗ No dray_* file found in $BUNDLE_DIR/deb to rename."
           fi
 
           RPM_FILE=$(find "$BUNDLE_DIR"/rpm -maxdepth 1 -type f -name "dray_*" 2>/dev/null || true)
-          if [ -n "$RPM_FILE" ]; then
+          if [ -n "$RPM_FILE" ] && [ -f "$RPM_FILE" ]; then
             mv "$RPM_FILE" "${RPM_FILE/dray_/dray_linux_}"
           else
             echo "❗ No dray_* file found in $BUNDLE_DIR/rpm to rename."
