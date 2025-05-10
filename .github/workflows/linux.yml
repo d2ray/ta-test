@@ -74,11 +74,14 @@ jobs:
       - name: Rename artifact on Windows
         shell: pwsh
         run: |
-          $file = Get-ChildItem -Path $env:BUNDLE_DIR\ -Filter "dray_*" | Select-Object -First 1
+          $file = Get-ChildItem -Path $env:BUNDLE_DIR\nsis\ -Filter "dray_*" | Select-Object -First 1
           if ($file) {
             $newName = $file.Name -replace '^dray_', 'dray_windows_'
             $newPath = Join-Path -Path $file.DirectoryName -ChildPath $newName
             Rename-Item -Path $file.FullName -NewName $newPath
+            Write-Host "✅ Renamed $($file.Name) to $newName"
+          } else {
+            Write-Host "❗ No file matching 'dray_*' found in $env:BUNDLE_DIR"
           }
 
       - name: List files in the release bundle directory
@@ -251,9 +254,9 @@ jobs:
             echo "❗ No dray_* file found in $BUNDLE_DIR/deb to rename."
           fi
 
-          RPM_FILE=$(find "$BUNDLE_DIR"/rpm -maxdepth 1 -type f -name "dray_*" 2>/dev/null || true)
+          RPM_FILE=$(find "$BUNDLE_DIR"/rpm -maxdepth 1 -type f -name "dray-*" 2>/dev/null || true)
           if [ -n "$RPM_FILE" ] && [ -f "$RPM_FILE" ]; then
-            mv "$RPM_FILE" "${RPM_FILE/dray_/dray_linux_}"
+            mv "$RPM_FILE" "${RPM_FILE/dray-/dray-linux-}"
           else
             echo "❗ No dray_* file found in $BUNDLE_DIR/rpm to rename."
           fi
