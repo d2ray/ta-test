@@ -43,6 +43,16 @@ jobs:
           npm install -g pnpm
           pnpm install
 
+      - name: Print OS, Rust, Node.js, npm and pnpm versions
+        shell: bash
+        run: |
+          echo "🖥️ OS: $(uname -a)"
+          echo "🦀 Rust version: $(rustc -V)"
+          echo "📦 Cargo version: $(cargo -V)"
+          echo "🟢 Node.js version: $(node -v)"
+          echo "📦 npm version: $(npm -v)"
+          echo "📦 pnpm version: $(pnpm -v || echo 'pnpm not installed')"
+
       - name: Download Xray
         shell: pwsh
         run: |
@@ -132,6 +142,16 @@ jobs:
           npm install -g pnpm
           pnpm install
 
+      - name: Print OS, Rust, Node.js, npm and pnpm versions
+        shell: bash
+        run: |
+          echo "🖥️ OS: $(uname -a)"
+          echo "🦀 Rust version: $(rustc -V)"
+          echo "📦 Cargo version: $(cargo -V)"
+          echo "🟢 Node.js version: $(node -v)"
+          echo "📦 npm version: $(npm -v)"
+          echo "📦 pnpm version: $(pnpm -v || echo 'pnpm not installed')"
+
       - name: Download Xray
         shell: bash
         run: |
@@ -215,6 +235,16 @@ jobs:
           npm install -g pnpm
           pnpm install
 
+      - name: Print OS, Rust, Node.js, npm and pnpm versions
+        shell: bash
+        run: |
+          echo "🖥️ OS: $(uname -a)"
+          echo "🦀 Rust version: $(rustc -V)"
+          echo "📦 Cargo version: $(cargo -V)"
+          echo "🟢 Node.js version: $(node -v)"
+          echo "📦 npm version: $(npm -v)"
+          echo "📦 pnpm version: $(pnpm -v || echo 'pnpm not installed')"
+
       - name: Download Xray
         shell: bash
         run: |
@@ -257,7 +287,7 @@ jobs:
           else
             echo "❗ No dray_* file found in $BUNDLE_DIR/deb to rename."
           fi
-
+          
           RPM_FILE=$(find "$BUNDLE_DIR"/rpm -maxdepth 1 -type f -name "dray-*" 2>/dev/null || true)
           if [ -n "$RPM_FILE" ] && [ -f "$RPM_FILE" ]; then
             NEW_RPM_FILE="${RPM_FILE/dray-/dray-linux-}"
