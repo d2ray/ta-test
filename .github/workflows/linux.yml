@@ -11,6 +11,66 @@ env:
   XRAY_VERSION: v25.4.30
 
 jobs:
+  windows:
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [ x64, arm64 ]
+        include:
+          - target: x86_64-pc-windows-msvc
+            xray_zip: Xray-windows-64.zip
+          - target: aarch64-pc-windows-msvc
+            xray_zip: Xray-windows-arm64-v8a.zip
+
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Add Rust Target
+        run: rustup target add ${{ matrix.target }}
+
+      - name: Setup pnpm and Install dependencies
+        run: |
+          npm install -g pnpm
+          pnpm install
+
+      - name: Download Xray
+        shell: pwsh
+        run: |
+          $url = "https://github.com/XTLS/Xray-core/releases/download/${{ env.XRAY_VERSION }}/${{ matrix.xray_zip }}"
+          Invoke-WebRequest -Uri $url -OutFile ${{ matrix.xray_zip }}
+          New-Item -ItemType Directory -Force -Path src-tauri/ray | Out-Null
+          Expand-Archive -Path ${{ matrix.xray_zip }} -DestinationPath src-tauri/ray -Force
+
+      - name: List files in the Xray directory
+        run: ls -R src-tauri/ray
+
+      - name: Get dray version from package.json
+        id: get_version
+        run: echo "version=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Build Dray App
+        run: pnpm run tauri build --target=${{ matrix.target }}
+
+      - name: List files in the release bundle directory
+        run: ls -R src-tauri/target/${{ matrix.target }}/release/bundle
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dary-macos-${{ matrix.arch }}
+          path: src-tauri/target/${{ matrix.target }}/release/bundle/*
+
+      - name: Upload release
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: v${{ steps.get_version.outputs.version }}
+          files: |
+            src-tauri/target/${{ matrix.target }}/release/bundle/dmg/*.dmg
+
   macos:
     strategy:
       fail-fast: false
@@ -47,6 +107,10 @@ jobs:
       - name: List files in the Xray directory
         run: ls -R src-tauri/ray
 
+      - name: Get dray version from package.json
+        id: get_version
+        run: echo "version=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
+
       - name: Build Dray App
         run: pnpm run tauri build --target=${{ matrix.target }}
 
@@ -63,7 +127,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag_name: ${{ github.ref }}
+          tag_name: v${{ steps.get_version.outputs.version }}
           files: |
             src-tauri/target/${{ matrix.target }}/release/bundle/dmg/*.dmg
 
@@ -101,6 +165,10 @@ jobs:
       - name: List files in the Xray directory
         run: ls -R src-tauri/ray
 
+      - name: Get dray version from package.json
+        id: get_version
+        run: echo "version=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
+
       - name: Install dependencies on Linux
         run: |
           sudo apt update
@@ -122,7 +190,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag_name: ${{ github.ref }}
+          tag_name: v${{ steps.get_version.outputs.version }}
           files: |
             src-tauri/target/${{ matrix.target }}/release/bundle/deb/*.deb
             src-tauri/target/${{ matrix.target }}/release/bundle/rpm/*.rpm
