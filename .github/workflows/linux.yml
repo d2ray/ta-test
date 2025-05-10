@@ -154,9 +154,12 @@ jobs:
 
       - name: Rename artifact on macOS
         run: |
-          cd "$BUNDLE_DIR"
-          FILE=$(ls "$BUNDLE_DIR"/dmg/dray_*)
-          mv "$FILE" "${FILE/dray_/dray_macos_}"
+          FILE=$(ls "$BUNDLE_DIR"/dmg/dray_* 2>/dev/null || true)
+          if [ -n "$FILE" ]; then
+            mv "$FILE" "${FILE/dray_/dray_macos_}"
+          else
+            echo "❗ No dray_* file found in $BUNDLE_DIR/dmg to rename."
+          fi
 
       - name: List files in the release bundle directory
         run: ls -R src-tauri/target/${{ matrix.target }}/release/bundle
@@ -238,9 +241,19 @@ jobs:
 
       - name: Rename artifact on Linux
         run: |
-          cd "$BUNDLE_DIR"
-          FILE=$(ls dray_*)
-          mv "$FILE" "${FILE/dray_/dray_linux_}"
+          DEB_FILE=$(ls "$BUNDLE_DIR"/deb/dray_* 2>/dev/null || true)
+          if [ -n "$DEB_FILE" ]; then
+            mv "$DEB_FILE" "${DEB_FILE/dray_/dray_linux_}"
+          else
+            echo "❗ No dray_* file found in $BUNDLE_DIR/deb to rename."
+          fi
+          
+          RPM_FILE=$(ls "$BUNDLE_DIR"/rpm/dray_* 2>/dev/null || true)
+          if [ -n "$RPM_FILE" ]; then
+            mv "$RPM_FILE" "${RPM_FILE/dray_/dray_linux_}"
+          else
+            echo "❗ No dray_* file found in $BUNDLE_DIR/rpm to rename."
+          fi
 
       - name: List files in the release bundle directory
         run: ls -R src-tauri/target/${{ matrix.target }}/release/bundle
