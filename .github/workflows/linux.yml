@@ -49,7 +49,9 @@ jobs:
 
       - name: Get dray version from package.json
         id: get_version
-        run: echo "version=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
+        run: ｜
+          echo "version=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
+          echo "Dray version is ${{ steps.get_version.outputs.version }}"
 
       - name: Build Dray App
         run: pnpm run tauri build --target=${{ matrix.target }}
@@ -109,7 +111,9 @@ jobs:
 
       - name: Get dray version from package.json
         id: get_version
-        run: echo "version=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
+        run: ｜
+          echo "version=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
+          echo "Dray version is ${{ steps.get_version.outputs.version }}"
 
       - name: Build Dray App
         run: pnpm run tauri build --target=${{ matrix.target }}
@@ -167,7 +171,9 @@ jobs:
 
       - name: Get dray version from package.json
         id: get_version
-        run: echo "version=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
+        run: ｜
+          echo "version=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
+          echo "Dray version is ${{ steps.get_version.outputs.version }}"
 
       - name: Install dependencies on Linux
         run: |
