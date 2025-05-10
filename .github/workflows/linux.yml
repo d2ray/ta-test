@@ -70,7 +70,7 @@ jobs:
       - name: Rename artifact on Windows
         shell: pwsh
         run: |
-          $file = Get-ChildItem -Filter "dray_*.exe" | Select-Object -First 1
+          $file = Get-ChildItem -Filter "dray_*" | Select-Object -First 1
           if ($file) {
             $newName = $file.Name -replace '^dray_', 'dray_windows_'
             Rename-Item -Path $file.FullName -NewName $newName
