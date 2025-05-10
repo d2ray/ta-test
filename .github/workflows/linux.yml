@@ -139,6 +139,11 @@ jobs:
       - name: Build Dray App
         run: pnpm run tauri build --target=${{ matrix.target }}
 
+      - name: Rename artifact on macOS
+        run: |
+          FILE=$(ls dray_*)
+          mv "$FILE" "${FILE/dray_/dray_macos_}"
+
       - name: List files in the release bundle directory
         run: ls -R src-tauri/target/${{ matrix.target }}/release/bundle
 
@@ -212,6 +217,11 @@ jobs:
 
       - name: Build Dray App
         run: pnpm run tauri build --target=${{ matrix.target }}
+
+      - name: Rename artifact on Linux
+        run: |
+          FILE=$(ls dray_*)
+          mv "$FILE" "${FILE/dray_/dray_linux_}"
 
       - name: List files in the release bundle directory
         run: ls -R src-tauri/target/${{ matrix.target }}/release/bundle
