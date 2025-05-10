@@ -11,6 +11,62 @@ env:
   XRAY_VERSION: v25.4.30
 
 jobs:
+  macos:
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [ x64, arm64 ]
+        include:
+          - target: x86_64-apple-darwin
+            xray_zip: Xray-macos-64.zip
+          - target: aarch64-apple-darwin
+            xray_zip: Xray-macos-arm64-v8a.zip
+
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Add Rust Target
+        run: rustup target add ${{ matrix.target }}
+
+      - name: Setup pnpm and Install dependencies
+        run: |
+          npm install -g pnpm
+          pnpm install
+
+      - name: Download Xray
+        shell: bash
+        run: |
+          URL="https://github.com/XTLS/Xray-core/releases/download/${{ env.XRAY_VERSION }}/${{ matrix.xray_zip }}"
+          wget "$URL" -O "${{ matrix.xray_zip }}"
+          mkdir -p src-tauri/ray
+          unzip -o "${{ matrix.xray_zip }}" -d src-tauri/ray
+
+      - name: List files in the Xray directory
+        run: ls -R src-tauri/ray
+
+      - name: Build Dray App
+        run: pnpm run tauri build --target=${{ matrix.target }}
+
+      - name: List files in the release bundle directory
+        run: ls -R src-tauri/target/${{ matrix.target }}/release/bundle
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dary-macos-${{ matrix.arch }}
+          path: src-tauri/target/${{ matrix.target }}/release/bundle/*
+
+      - name: Upload release
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref }}
+          files: |
+            src-tauri/target/${{ matrix.target }}/release/bundle/dmg/*.dmg
+
   linux:
     strategy:
       fail-fast: false
@@ -34,7 +90,7 @@ jobs:
           npm install -g pnpm
           pnpm install
 
-      - name: Set file name and download URL (Unix)
+      - name: Download Xray
         shell: bash
         run: |
           URL="https://github.com/XTLS/Xray-core/releases/download/${{ env.XRAY_VERSION }}/${{ matrix.xray_zip }}"
@@ -50,7 +106,7 @@ jobs:
           sudo apt update
           sudo apt install libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev
 
-      - name: Build Tauri App
+      - name: Build Dray App
         run: pnpm run tauri build --target=${{ matrix.target }}
 
       - name: List files in the release bundle directory
