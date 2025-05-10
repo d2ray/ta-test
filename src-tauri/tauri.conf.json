@@ -19,26 +19,13 @@
 	  "ray/*"
 	],
 	"active": true,
-	"targets": [
-	  "dmg",
-	  "nsis",
-	  "deb",
-	  "rpm"
-	],
+	"targets": "all",
 	"icon": [
 	  "icons/64x64.png",
 	  "icons/icon.png",
 	  "icons/icon.icns",
 	  "icons/icon.ico"
 	],
-	"macOS": {},
-	"linux": {
-	  "deb": {
-		"depends": [
-		  "libwebkit2gtk-4.1-dev"
-		]
-	  }
-	},
 	"windows": {
 	  "nsis": {
 		"installerIcon": "icons/icon.ico",
