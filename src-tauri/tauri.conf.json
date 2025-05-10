@@ -32,7 +32,16 @@
 	  "icons/icon.ico"
 	],
 	"macOS": {},
-	"linux": {},
+	"linux": {
+	  "deb": {
+		"depends": [
+		  "libwebkit2gtk-4.1-dev"
+		]
+	  },
+	  "icon": [
+		"icons/icon.png"
+	  ]
+	},
 	"windows": {
 	  "nsis": {
 		"installerIcon": "icons/icon.ico",
