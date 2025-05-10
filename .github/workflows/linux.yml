@@ -155,7 +155,7 @@ jobs:
       - name: Rename artifact on macOS
         run: |
           cd "$BUNDLE_DIR"
-          FILE=$(ls dray_*)
+          FILE=$(ls "$BUNDLE_DIR"/dmg/dray_*)
           mv "$FILE" "${FILE/dray_/dray_macos_}"
 
       - name: List files in the release bundle directory
